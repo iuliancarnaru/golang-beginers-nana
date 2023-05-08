@@ -3,7 +3,6 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
-	"strconv"
 )
 
 // global variables
@@ -12,7 +11,16 @@ const conferenceTickets int = 50
 var conferenceName string = "GO conference"
 
 var remainingTickets uint = 50
-var bookings = make([]map[string]string, 0) // a list of maps
+
+// var bookings = make([]map[string]string, 0) // a list of maps
+var bookings = make([]UserData, 0)
+
+type UserData struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTickets uint
+}
 
 func main() {
 
@@ -62,7 +70,7 @@ func getFirstNames() []string {
 	firstNames := []string{}
 
 	for _, booking := range bookings {
-		firstNames = append(firstNames, booking["firstName"])
+		firstNames = append(firstNames, booking.firstName)
 	}
 
 	return firstNames
@@ -93,14 +101,22 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 	remainingTickets = remainingTickets - userTickets
 
 	// create a map for user (supports only one type which is initially declared)
-	var userData = make(map[string]string)
+	// var userData = make(map[string]string)
 
-	userData["fistName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	userData["userTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+	// userData["firstName"] = firstName
+	// userData["lastName"] = lastName
+	// userData["email"] = email
+	// userData["userTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
+	var userData = UserData{
+		firstName:       firstName,
+		lastName:        lastName,
+		email:           email,
+		numberOfTickets: userTickets,
+	}
 
 	bookings = append(bookings, userData)
+	fmt.Printf("bookings %v", bookings)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at: %v\n", firstName, lastName, userTickets, email)
 	fmt.Printf("%v tickets remain for %v\n", remainingTickets, conferenceName)
